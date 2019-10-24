@@ -40,7 +40,7 @@ RedisModuleCtx *CommandCtx_GetRedisCtx
 );
 
 // Get GraphContext.
-GraphContext* CommandCtx_GetGraphContext
+GraphContext *CommandCtx_GetGraphContext
 (
 	const CommandCtx *qctx
 );
