@@ -12,7 +12,9 @@ from behave.__main__ import main as behave_main
 
 def test_tck():
     env = Env()
-    cmd = ["./features/", '--tags=-skip']
+    #  cmd = ["./features/", '--tags=-skip'] # Standard command
+    # Running the command with '--tags=skip' runs only skipped tests, which is useful for finding which skips to remove.
+    cmd = ["./features/", "-f allure_behave.formatter:AllureFormatter", "-oallure_result"]
     if not env.verbose:
         cmd.append('--format=progress')
     res = behave_main(cmd)
