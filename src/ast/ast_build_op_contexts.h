@@ -42,7 +42,7 @@ void AST_PrepareDeleteOp(const cypher_astnode_t *delete_clause, const QueryGraph
 						 const char ***nodes_ref, const char ***edges_ref);
 
 // Determine whether a sort operation should be ascending or descending
-int AST_PrepareSortOp(const cypher_astnode_t *order_clause);
+void AST_PrepareSortOp(const cypher_astnode_t *order_clause, int **sort_directions);
 
 // Extract the necessary information to populate a unwind operation from an UNWIND clause.
 AST_UnwindContext AST_PrepareUnwindOp(const cypher_astnode_t *unwind_clause);

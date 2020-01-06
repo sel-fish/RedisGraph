@@ -116,21 +116,26 @@ void AST_PrepareDeleteOp(const cypher_astnode_t *delete_clause, const QueryGraph
 	*edges_ref = edges_to_delete;
 }
 
-int AST_PrepareSortOp(const cypher_astnode_t *order_clause) {
+// Direction是在这个函数里面获取的
+// 先看下这里的order_clause的内容, 看不到内容，但是
+// MATCH (n:Person) RETURN n.id ORDER BY n.id DESC, n.name ASC
+// 这条语句的nitems返回的是2，所以这里应该是有上下文的
+// 可以先把这里改成int数组
+void AST_PrepareSortOp(const cypher_astnode_t *order_clause, int **sort_directions) {
 	assert(order_clause);
 
-	bool ascending = true;
 	unsigned int nitems = cypher_ast_order_by_nitems(order_clause);
+	int *directions = array_new(int, nitems);
 
 	for(unsigned int i = 0; i < nitems; i ++) {
 		const cypher_astnode_t *item = cypher_ast_order_by_get_item(order_clause, i);
 		// TODO direction should be specifiable per order entity
-		ascending = cypher_ast_sort_item_is_ascending(item);
+		bool ascending = cypher_ast_sort_item_is_ascending(item);
+		int direction = ascending ? DIR_ASC : DIR_DESC;
+		directions = array_append(directions, direction);
 	}
 
-	int direction = ascending ? DIR_ASC : DIR_DESC;
-
-	return direction;
+  	*sort_directions = directions;
 }
 
 AST_UnwindContext AST_PrepareUnwindOp(const cypher_astnode_t *unwind_clause) {
